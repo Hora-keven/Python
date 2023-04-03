@@ -1,0 +1,72 @@
+import random
+
+
+def inicio():
+    print("----------JOGO DA FORCA----------")
+    print("VOCÊ TEM 6 CHANCES PARA JOGAR!")
+    print("-----------BOM JOGO!---------")
+
+def sorteado():
+    sorteio = random.randint(0, len(palavras) - 1)
+    return sorteio
+
+
+def traco():
+    for i in range(len(traco_oculto)):
+        print(traco_oculto[i], end=" ")
+
+
+def jogo(vida):
+
+    while True:
+
+        print()
+        print(dica)
+        traco()
+        usuario = str(input("\nDigite uma letra: "))
+
+        if usuario not in palavra_sorteada:
+            errado.append(usuario)
+            print(f"Letras que você errou {errado}")
+            vida -= 1
+            print(f'errado, voce tem {vida} de vida')
+            if vida <= 0:
+                print("SUA VIDA CABOU, TENTE NOVAMENTE DEPOIS!")
+                break
+
+        if usuario in palavra_sorteada:
+            letra_colocada.append(usuario)
+            print('-'*35)
+            print(f"Você acertou uma letras, essas são as Letras que você acertou! {letra_colocada}")
+            print('-' * 35)
+            if usuario in palavra_sorteada:
+                for i in range(len(palavra_sorteada)):
+                    if usuario == palavra_sorteada[i]:
+                        traco_oculto[i] = usuario
+
+
+        if '_' not in traco_oculto:
+            print("PARABENS! VOCE ACERTOU!!!")
+            break
+
+
+
+
+
+
+palavras = ["cachorro", 'gato']
+dicas = ["Dica: A palavra tem 8 letras, animal amado por todos ", "Dica: A palavra tem 4 letras, animal amado por todos"]
+letra_colocada = []
+life = 6
+soletrando = []
+errado = []
+sorteio = sorteado()
+palavra_sorteada = palavras[sorteio]
+traco_oculto = ['_']*len(palavra_sorteada)
+dica = dicas[sorteio]
+
+
+
+
+inicio()
+jogo(6)
