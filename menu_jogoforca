@@ -1,0 +1,15 @@
+from jogoNutella import jogo
+from cafecomleite import jogo_cafe
+
+
+def menu():
+    print("SEJA BEM VINDO AO MENU, ESCOLHA UM NUMERO\n [1] Nutella\n [2] Cafe com leite\n")
+    usuario = int(input("ESCOLHA UMA OPÇÃO: "))
+    if usuario == 1:
+        jogo(6)
+    elif usuario == 2:
+        jogo_cafe(6)
+        pass
+
+
+menu()
