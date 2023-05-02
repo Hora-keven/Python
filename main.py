@@ -1,7 +1,8 @@
+from tk_inter import Tela
 
-import jogocaraacara
-from jogocaraacara import opcao_pessoa, opcao_lugares, menu
 
-menu()
+t = Tela()
+
+
 
 

@@ -1,6 +1,7 @@
 import random
 
 
+
 class Jogo:
     def __init__(self, nome : str):
         self.__nome = nome
@@ -18,34 +19,12 @@ class Jogo:
 
     @property
     def dicas(self):
-        while True:
-            return self.__dicas
-
+        return self.__dicas
 
     @property
-    def inicio_jogo(self):
-
-        while True:
-            print("\033[36mDica: \033[m", self.__dicas[self.sorteio()])
-            usuario = input("\033[32mDigite sua aposta: \033[m").title()
-            if usuario != self.__nome:
-                self.__vida -= 1
-                print(f"Você errou, você tem {self.__vida} de vida!")
-                if self.__vida <= 0:
-                    print("Suas chances acabaram!  tente novamente!")
-                    quit()
-
-            elif usuario == self.__nome:
-                print("Você ganhou! Parabéns!")
-
-            escolha_usuario = input("Quer continuar? [S] ou [N]")
-            if escolha_usuario in "Ss":
-                continue
-            elif escolha_usuario in "Nn":
-                quit()
-            else:
-                print("Digite algo certo!")
-
+    def sorteia_dicas(self):
+        dica = self.__dicas[self.sorteio()]
+        return dica
 
     def sorteio(self)->int:
         sorteio = random.randint(0, 4)
