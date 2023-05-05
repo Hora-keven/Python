@@ -1,0 +1,23 @@
+
+class Pokemon:
+    def __init__(self, nome, ataque, velocidade, vida, tipo):
+        self.nome = nome
+        self.ataque = ataque
+        self.velocidade = velocidade
+        self.vida = vida
+        self.tipo = tipo
+
+
+class Starmie(Pokemon):
+    def __init__(self, nome, ataque, velocidade, vida, tipo):
+        super().__init__(nome, ataque, velocidade, vida, tipo)
+
+
+class Magmar(Pokemon):
+    def __init__(self, nome, ataque, velocidade, vida, tipo):
+        super().__init__(nome.nome, ataque, velocidade, vida, tipo)
+
+
+class Veneusar(Pokemon):
+    def __init__(self, nome, ataque, velocidade, vida, tipo):
+        super().__init__(nome.nome, ataque, velocidade, vida, tipo)
