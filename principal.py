@@ -1,2 +1,4 @@
-from web2 import Web
-j = Web()
+from tk_inter import Tela
+
+
+t = Tela()
