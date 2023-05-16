@@ -1,174 +1,129 @@
 from tkinter import *
 from tkinter import ttk
-import jogo
-from jogo import Jogo
-import random
+import banco
+from bot import Bot
+import awesometkinter as atk
+import os
+pastaApp = os.path.dirname(__file__)
 
 telinha = Tk()
+t = Bot()
 
-
-class Tela():
+class Tela:
     def __init__(self):
         self.telinha = telinha
-        self.vida = 5
         self.tela()
         self.frames()
         self.botoes()
         self.labels()
+        self.lista_frame2()
         self.entrada()
-        self.lugares()
-        self.pessoas()
         telinha.mainloop()
 
-    def tela(self):
+    def tela(self) -> None:
         """
         Função que cria a tela
         :return: None
         """
-        self.telinha.title("Cara a Cara")
-        self.telinha.configure(background="#A9A9A9")
+        self.telinha.title("Celulares")
+        self.telinha.configure(background="#FFFFFF")
         self.telinha.resizable(True, True)
+        self.zoom()
 
-    def frames(self):
+    def frames(self) -> None:
         """
-        Função que criar os frames da tela
+        Função que cria os frames da Tela
         :return: None
         """
-        self.frame = Frame(self.telinha, bg="#4682B4", highlightthickness=0.5, highlightbackground="#4682B4")
+        self.frame = atk.Frame3d(self.telinha, bg="#612a92")
         self.frame.place(relx=0.03, rely=0.03, relwidth=0.94, relheight=0.11)
 
-        self.frame_2 = Frame(self.telinha, bg='#4682B4', highlightthickness=0.5, highlightbackground="#4682B4")
+        self.frame_2 = atk.Frame3d(self.telinha, bg='#612a92')
         self.frame_2.place(relx=0.03, rely=0.20, relwidth=0.94, relheight=0.25)
 
-        self.frame_3 = Frame(self.telinha, bg='#4682B4', highlightthickness=0.5, highlightbackground="#4682B4")
+        self.frame_3 = atk.Frame3d(self.telinha, bg='#612a92')
         self.frame_3.place(relx=0.03, rely=0.50, relwidth=0.94, relheight=0.45)
 
-    def botoes(self):
+    def botoes(self) -> None:
         """
-        Função que cria os botões
-        :return:None
-        """
-        self.botao_dica = Button(self.frame_3,font=("Arial", 13), text="Opção pessoas", command=self.mostra_dica)
-        self.botao_dica.place(relx=0.4, rely=0.38, relwidth=0.1, relheight=0.10)
-
-        self.botao_dica1 = Button(self.frame_3,font=("Arial", 13), text="Opção Lugares", command=self.mostra_dica_lugar)
-        self.botao_dica1.place(relx=0.51, rely=0.38, relwidth=0.1, relheight=0.10)
-
-        self.botao_confirma = Button(self.frame_2, font=("Arial", 13), text="Confirmar", command=self.confirma_ganho_perda)
-        self.botao_confirma.place(relx=0.33, rely=0.40, relwidth=0.1, relheight=0.15)
-
-    def labels(self):
-        """
-        função que coloca os textos presente na tela
+        Função que criar os botões da tela
         :return: None
         """
-        self.lb_input = Label(self.frame_2, font=("Arial", 15), text='Escreva quem é: ', bg='#4682B4')
-        self.lb_input.place(relx=0.005, rely=0.40, relwidth=0.1, relheight=0.15)
+        self.botao_confirma = atk.Button3d(self.frame_2, text="Confirmar", bg='#8ae287', command=self.procura)
+        self.botao_confirma.place(relx=0.40, rely=0.41, relwidth=0.12, relheight=0.15)
 
-        self.lbStatus = Label(self.frame, font=("Arial", 25), text='-=-=-=-=JOGO CARA A CARA-=-=-=-', fg='black', bg='#4682B4')
-        self.lbStatus.place(relx=0.05, rely=0.25, relwidth=0.90, relheight=0.21)
+        self.botao_todos = atk.Button3d(self.frame_2, bg="#8ae287", text="Todos Celulares", command=self.insere)
+        self.botao_todos.place(relx=0.53, rely=0.41, relwidth=0.12, relheight=0.15)
 
-        self.lbDica = Label(self.frame_3,font=("Arial", 15), text='', fg='black', bg='#4682B4')
-        self.lbDica.place(relx=0.25, rely=0.28, relwidth=0.50, relheight=0.10)
-
-        self.lbganhador_perdedor = Label(self.frame_3, font=("Arial", 15),  text='', fg='black', bg='#4682B4')
-        self.lbganhador_perdedor.place(relx=0.05, rely=0.55, relwidth=0.90, relheight=0.10)
-
-    def entrada(self):
+    def labels(self) -> None:
         """
-        Função que cria as entradas do usuário
+        Função que cria os labels, ou seja os textos que aparecem na tela
         :return: None
         """
-        self.entrada_usuario = Entry(self.frame_2)
-        self.entrada_usuario.place(relx=0.10, rely=0.41, relwidth=0.20, relheight=0.15)
+        self.lb_input = Label(self.frame_2, font=("Arial", 15), text='Escreva qual a marca:  ', bg='#612a92')
+        self.lb_input.place(relx=0.005, rely=0.40, relwidth=0.20, relheight=0.15)
 
-    def mostra_dica(self):
+        self.lbtitulo = Label(self.frame, image=self.img_zoom)
+        self.lbtitulo.place(relx=0.05, rely=0.25, relheight=0.37, relwidth=0.07)
+
+        self.lbStatus = Label(self.frame_2, font=("Arial", 25), text='', fg='black', bg='#612a92')
+        self.lbStatus.place(relx=0.15, rely=0.70, relwidth=0.70, relheight=0.15)
+
+    def entrada(self) -> None:
         """
-        Função que mostra a dica na tela
-        :return: str
-        """
-        self.pessoa.add_dicas('o mais lindo', "hosta de instrumentos", "lindo", " veio de Salvador", "toca violão")
-
-        self.pessoa2.add_dicas("Estuda no IF", "a melhor front-end", "melhor pessoa", "Ama Java",
-                          "Mora em uma cidade pequena")
-
-        self.pessoa3.add_dicas("O cara do código", "o mais gente boa", "Iludido",
-                          "Está no ensino médio", "O mais novo da sala")
-
-        if self.escolha == self.pessoa3.nome:
-
-            return self.lbDica.config(text=f"Dica: {self.pessoa3.sorteia_dicas}")
-
-        elif self.escolha == self.pessoa2.nome:
-            return self.lbDica.config(text=f"Dica: {self.pessoa2.sorteia_dicas}")
-
-        elif self.escolha == self.pessoa.nome:
-            return self.lbDica.config(text=f"Dica: {self.pessoa.sorteia_dicas}")
-
-    def pessoas(self):
-        """
-        Função que instaância os objetos
+        Função que cria uma caixa de input para receber a entrada de dados do usuario
         :return: None
         """
-        self.pessoa3 = Jogo("Pedro")
-        self.pessoa = Jogo("Keven")
-        self.pessoa2 = Jogo("Manuela")
-        lista = [self.pessoa.nome, self.pessoa2.nome, self.pessoa3.nome]
-        self.escolha = random.choice(lista)
+        self.input = Entry(self.frame_2)
+        self.input.place(relx=0.18, rely=0.41, relwidth=0.20, relheight=0.15)
 
-    def lugares(self):
+    def lista_frame2(self) -> None:
         """
-        Função que instância os objetos
+        Função que cria lista que aoarece na tela
         :return: None
         """
-        self.Maranhao = Jogo("Maranhão")
+        self.listaCli = ttk.Treeview(self.frame_3, height=3, columns=('col1', 'col2', 'col3'))
 
-        self.Bahia = Jogo("Bahia")
+        self.listaCli.heading('#1', text='Marca')
+        self.listaCli.heading('#2', text='Modelo')
+        self.listaCli.heading('#3', text='Valor')
 
-        self.Sao_Paulo = Jogo("São Paulo")
+        self.listaCli.column('#1', width=100)
+        self.listaCli.column('#2', width=100)
+        self.listaCli.column('#3', width=100)
 
-        lista = [self.Maranhao.nome, self.Bahia.nome, self.Sao_Paulo.nome]
-        self.escolha1 = random.choice(lista)
+        self.listaCli.place(relx=0.01, rely=0.1, relwidth=0.94, relheight=0.85)
 
+        self.scroolLista = Scrollbar(self.frame_3, orient='vertical')
+        self.listaCli.configure(yscrollcommand=self.scroolLista.set)
+        self.scroolLista.place(relx=0.96, rely=0.1, relwidth=0.02, relheight=0.85)
 
-    def mostra_dica_lugar(self):
+    def insere(self) -> None:
         """
-        Função que mostra a dica do objeto criado
+        Função que pega do banco de dados as informações e mostra na tela
         :return: None
         """
-        self.Maranhao.add_dicas('Parque nacional Lençóis freáticos', "Palácio dos leões",
-                           "Catedral Metropolitana Nossa Senhora da Vitória",
-                           "Parque Nacional da Chapadas da mesa", "Capital São Luis")
+        self.listaCli.delete(*self.listaCli.get_children())
+        for i in banco.cursor.execute(f"SELECT * FROM celulares"):
+            self.listaCli.insert(parent="", index=0, values=i)
 
-        self.Bahia.add_dicas("Elevador Lacerda", "Basilica Senhor do Bonfim", "Mercado Modelo", "Pelourinho",
-                        "Salvador")
-
-        self.Sao_Paulo.add_dicas("Parque Ibirapuera", "Mercado Municipal", "Pinacoteca",
-                            "Museu do futebol", "Campinas faz parte")
-
-        if self.escolha1 == self.Sao_Paulo.nome:
-
-            return self.lbDica.config(text=f"Dica: {self.Sao_Paulo.sorteia_dicas}")
-
-        elif self.escolha1 == self.Bahia.nome:
-            return self.lbDica.config(text=f"Dica: {self.Bahia.sorteia_dicas}")
-
-        elif self.escolha1 == self.Maranhao.nome:
-            return self.lbDica.config(text=f"Dica: {self.Maranhao.sorteia_dicas}")
-
-    def confirma_ganho_perda(self):
+    def procura(self) -> None:
         """
-        Função que mostra na tela se ganhou ou perdeu
+        Função que procura no banco de dados de acordo com o que o usuario quer.
         :return: None
         """
-        if self.entrada_usuario.get() == self.Maranhao.nome or self.entrada_usuario.get() == self.Bahia.nome or self.entrada_usuario.get() == self.Sao_Paulo.nome:
-            self.lbganhador_perdedor.config(text="Você ganhou!")
+        self.listaCli.delete(*self.listaCli.get_children())
 
-        elif self.entrada_usuario.get() == self.pessoa.nome or self.entrada_usuario.get() == self.pessoa2.nome or self.entrada_usuario.get() == self.pessoa3.nome:
-            self.lbganhador_perdedor.config(text="Você ganhou!")
+        lista = ["Samsung", "Motorola", "Multilaser", "Iphone", "Xiaomi"]
+        for i in banco.cursor.execute(f"SELECT * FROM celulares WHERE marca LIKE '%{self.input.get()}%'"):
+            self.listaCli.insert(parent='', index=0, values=i)
+
+        if self.input.get() not in lista:
+            self.lbStatus.config(text='Escreva uma marca que já está no banco!!')
 
         else:
-            self.vida-=1
-            self.lbganhador_perdedor.config(text=f"Você errou! você tem {self.vida} de vida!")
-            if self.vida <= 0:
-                self.lbganhador_perdedor.config(text=f"SUAS CHANCES ACABARAM!!")
+            self.lbStatus.config(text="Buscando...")
+
+    def zoom(self):
+        self.img_zoom = PhotoImage(file=pastaApp+"//zoom.logo.png")
+
