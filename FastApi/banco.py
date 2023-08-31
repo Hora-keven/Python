@@ -1,4 +1,5 @@
 import sqlite3
+import threading
 
 banco = sqlite3.connect('banco.db')
 cursor = banco.cursor()
@@ -11,4 +12,11 @@ def pessoaEscolhida(id):
 
     return pessoaEscolhida
 
+def inserir(nome, idade):
+    cursor.execute('''INSERT INTO pessoas (nome, idade) VALUES (?, ?)''', (nome, idade))
+    banco.commit()
+    
 
+
+
+  
