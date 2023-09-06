@@ -3,8 +3,8 @@ import pyodbc
 
 app = Flask(__name__)
 
-conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=CA-C-0057K\SQLEXPRESS (BR\CT67CA);DATABASE=pessoas;UID=ct67ca;PWD=s25INDUSTRIAconectada')
-conn.cursor("INSER INTO pessoas (nome, idade) VALUES ('BEATRIZ', '15')")
+conn = pyodbc.connect('Driver={SQL Server};Server=CA-C-0057K\SQLEXPRESS;Database=pessoas;')
+cursor = conn.cursor()
 
 pessoas = [
       {
@@ -32,9 +32,12 @@ pessoas = [
 
 @app.route('/pessoas', methods=['POST'])
 def Json():
-  
-      return make_response(
-        jsonify(pessoas))
+  comando = """SELECT * FROM todasPessoas"""
+  t = cursor.execute(comando).fetchall()
+  print(t)
+ 
+  for i in t:
+    return f'pessoa:{i}'
 
 
 @app.route('/pessoas/<int:id>', methods=['GET'])
