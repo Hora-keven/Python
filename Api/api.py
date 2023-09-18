@@ -45,9 +45,6 @@ def Json():
   #while True:
     #t+=1
     #return f'{i[t]}'
-  
-    
-
 
 @app.route('/pessoas/<int:id>', methods=['POST'])
 def procurar_pessoas(id):

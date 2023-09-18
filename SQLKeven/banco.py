@@ -34,6 +34,7 @@ def nomesAlunosCurso():
 def nomesAlunosDisciplina():
     nomes = cursor.execute("SELECT Aluno.nome, Disciplina.nome FROM Aluno INNER JOIN Disciplina ON Aluno.id_aluno=Disciplina.id_curso WHERE Disciplina.id_disc=1 ")
     print(nomes.fetchall())
+    
 nomesAlunosCurso()
 nomesAlunosDisciplina()
 # nome = ['Keven', 'maria', 'cauã', 'tereza', 'paulo', 'antonio']
