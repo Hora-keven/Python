@@ -1,4 +1,5 @@
 import json
+import requests
 from banco_livros import Livros
 
 def buscarDados(livros:list, capitulos:list):
@@ -8,6 +9,8 @@ def buscarDados(livros:list, capitulos:list):
     for i in range(66):
         livros.append(j[i]['name'])
         capitulos.append(j[i]['chapters'])
+
+    return livros, capitulos
 
 
        
