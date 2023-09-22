@@ -1,12 +1,12 @@
 import fastapi as f
 import uvicorn
 import json
-
+from LivrosB import FuncaoBanco
 app = f.FastAPI()
 
 livros = []
 capitulos = []
-
+FuncaoBanco.buscarDados(livros, capitulos)
 dicionario_livros ={}
 
 print(len(livros))
