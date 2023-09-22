@@ -1,37 +1,31 @@
 import fastapi as f
 import uvicorn
-#from bancoSqlServer import cursor, banco
 import json
-from banco_livros import Livros
-from funcao_banco import buscarDados
-
 
 app = f.FastAPI()
 
 livros = []
 capitulos = []
-dicionario_livros = []
-buscarDados(livros, capitulos)
+
+dicionario_livros ={}
+
+print(len(livros))
 
 @app.get("/")
 def selecionar_todos_livros():
     '''livros = cursor.execute("SELECT * FROM Livros").fetchall()
     banco.commit()'''
-    for i in range(66):
-        dicionario_livros[livros[i]] = capitulos[i]
-    livrosZip = []
-    index=0
-    for linha in dicionario_livros:
-        livrosZip.append(dict(zip(index, linha)))
-        index+=1
 
-    livrosJson = json.dumps(livrosZip)
+    for i in range(66):
+        dicionario_livros[i] = livros[i], capitulos[i]
+
+    livrosJson = json.dumps(dicionario_livros)
     livrosJson = json.loads(livrosJson)
 
     return livrosJson
 
 @app.post("/livro", tags=['livros'])  
-def selecionar_livro_id(livro:Livros) -> dict:
+def selecionar_livro_id() -> dict:
     """
     livro = cursor.execute(f"SELECT * FROM Livros WHERE id={id}").fetchall()
     print(livro)
@@ -42,7 +36,7 @@ def selecionar_livro_id(livro:Livros) -> dict:
     for linha in livro:
         livroZip.append(dict(zip(coluna, linha)))"""
     
-    livro = livro.dict()
+    # livro = livro.dict()
     
     
     return 'keven'
