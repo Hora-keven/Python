@@ -1,58 +1,56 @@
 import fastapi as f
+from fastapi import Depends, HTTPException, status, Response
 import uvicorn
 import json
-from LivrosB import FuncaoBanco
+import requests
+import LivrosB
+from LivrosB import FuncaoBanco, Livros, LivroBase, Atualiza_livro
+from sqlalchemy import select, insert, update, delete
+from sqlalchemy.orm import Session, sessionmaker
 app = f.FastAPI()
 
-livros = []
-capitulos = []
-FuncaoBanco.buscarDados(livros, capitulos)
-dicionario_livros ={}
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=LivrosB.engine)
+session = LivrosB.session
+cursor = LivrosB.cursor
 
-print(len(livros))
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@app.get("/")
-def selecionar_todos_livros():
-    '''livros = cursor.execute("SELECT * FROM Livros").fetchall()
-    banco.commit()'''
 
-    for i in range(66):
-        dicionario_livros[i] = livros[i], capitulos[i]
+@app.get("/livros", response_model=None, status_code=status.HTTP_201_CREATED)
+async def selecionar() -> dict:
+    livros = FuncaoBanco.selecionar_tudo(Livros)
+    return livros
 
-    livrosJson = json.dumps(dicionario_livros)
-    livrosJson = json.loads(livrosJson)
 
-    return livrosJson
+@app.get("/livros/{id}")  
+def selecionar_livro_id(id) -> str:
+    buscando = FuncaoBanco.selecionar_por_id(id)
+    return buscando
 
-@app.post("/livro", tags=['livros'])  
-def selecionar_livro_id() -> dict:
-    """
-    livro = cursor.execute(f"SELECT * FROM Livros WHERE id={id}").fetchall()
-    print(livro)
-    banco.commit()
-    coluna = [i[0] for i in cursor.description]
-
-    livroZip = []
-    for linha in livro:
-        livroZip.append(dict(zip(coluna, linha)))"""
+@app.post("/cadastra_livro", tags=['Livro'])
+def cadastrar_livro(livro:LivroBase) -> dict:
     
-    # livro = livro.dict()
-    
-    
-    return 'keven'
+    livro_dic = {
+        'nome_livro':livro.nome_livro,
+        'quantidade_livro':livro.quantidade_livro
+    }
+    FuncaoBanco.adicionar_dados_banco(livro)
+    return livro_dic
 
-@app.put("/livro_editado/{id}")
-async def editar_livro(id):
-  """  livro = cursor.execute(f"SELECT * FROM Livros WHERE id={id}").fetchall()
-    coluna = [i[0] for i in cursor.description]
- 
-    livroZip = []
-    for linha in livro:
-        livroZip.append(dict(zip(coluna, linha)))
-       
-        return livroZip
-    else:
-        raise f.HTTPException(status_code=f.HTTP_409_CONFLICT, detail=f'já existe um curso com ess {id} id!')"""
+@app.put("/atualiza_livro/{id}", response_model=None, status_code=status.HTTP_201_CREATED)
+async def cadastrar_livro(id:int, atualiza:Atualiza_livro = None) -> dict:
+    
+    livros = FuncaoBanco.selecionar_por_id(id)
+    atualizando = FuncaoBanco.atualizar(atualiza)
+
+    return atualizando
+
+
 
 if __name__ == '__main__':
     uvicorn.run(app)
